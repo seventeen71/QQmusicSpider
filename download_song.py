@@ -74,3 +74,78 @@ def extract_vkey(data):
         return result.group(1)
     else:
         return None
+
+def download_song(url):
+    """
+    下载歌曲
+    :param url:
+    :return:
+    """
+    global SINGER # 声明SINGER是全局变量
+
+    try:
+        response = requests.get(url=url, headers=HEADERS)
+        response.raise_for_status()
+    except:
+        print("【下载歌曲失败】")
+        return None
+    else:
+        with open(
+            "{0}-{1}.mp3".format(SONGNAME, SINGER), "wb") as file:
+
+            file.write(response.content)
+
+        print("【下载 {} 成功】".format(SONGNAME))
+        return True
+
+def qqmusic(songname):
+    """
+    执行整个下载歌曲过程的主要逻辑
+    :param songname:
+    :return:
+    """
+
+    global SONGNAME # 声明SONGNAME是全局变量
+    SONGNAME = songname
+
+    # 构建请求albumid的query参数
+    PARAMS_FOR_SEARCH["w"] = SONGNAME
+    dataAlbum = get_one_html(URL_FOR_SEARCH+parse.urlencode(PARAMS_FOR_SEARCH))
+    if not dataAlbum:
+        print("请求ablummid的网页数据失败")
+        return None
+
+    else:
+        # 提取albummid
+        albummid = extract_albummid(dataAlbum)
+        if not albummid:
+            print("提取albummid失败")
+            return None
+
+        # 构建请求songmid的query参数
+        PARAMS_FOR_SONGMID["albummid"] = albummid
+        dataSong = get_one_html(URL_FOR_SONGMID+parse.urlencode(PARAMS_FOR_SONGMID))
+        if not dataSong:
+            print("请求songmid的网页数据失败")
+            return None
+
+        songmid = extract_songmid(dataSong)
+
+
+        # 构建请求vke的query参数
+        PARAMS_FOR_VKEY["songmid"] = songmid
+        PARAMS_FOR_VKEY["filename"] = "C400{songmid}.m4a".format(songmid=songmid)
+        dataVkey = get_one_html(URL_FOR_VKEY+parse.urlencode(PARAMS_FOR_VKEY))
+        if not dataVkey:
+            print("请求vkey的网页数据失败")
+            return None
+
+        vkey = extract_vkey(dataVkey)
+
+
+        # 构建下载歌曲的query参数
+        PARAMS_FOR_VIPSONG["vkey"] = vkey
+        url = parse.urljoin(URL_FOR_VIPSONG, "C400"+songmid+".m4a?")
+
+        # 下载歌曲
+        download_song(url+"?"+parse.urlencode(PARAMS_FOR_VIPSONG))
