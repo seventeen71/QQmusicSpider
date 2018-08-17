@@ -41,3 +41,48 @@ PARAMS_FOR_SEARCH = {
     "platform": "yqq",
     "needNewCode": 0,
 }
+
+
+PARAMS_FOR_SONGMID = {
+    "albummid": "",
+    "g_tk": 5381,
+    "jsonpCallback": "albuminfoCallback",
+    "loginUin": 0,
+    "hostUin": 0,
+    "format": "jsonp",
+    "inCharset": "utf8",
+    "outCharset": "utf-8",
+    "notice": 0,
+    "platform": "yqq",
+    "needNewCode": 0
+}
+
+PARAMS_FOR_VKEY = {
+    "g_tk": 5381,
+    "jsonpCallback": "MusicJsonCallback8068498502205605",
+    "loginUin": 0,
+    "hostUin": 0,
+    "format": "json",
+    "inCharset": "utf8",
+    "outCharset": "utf-8",
+    "notice": 0,
+    "platform": "yqq",
+    "needNewCode": 0,
+    "cid": 205361747,
+    "callback": "MusicJsonCallback8068498502205605",
+    "uin": 0,
+    "songmid": "",
+    "filename": "",
+    "guid": 128924851
+}
+
+PARAMS_FOR_VIPSONG = {
+    "vkey": "",
+    "guid": 128924851,
+    "uin": 0,
+    "fromtag": 66
+}
+
+
+SONGNAME = ""
+SINGER = ""
